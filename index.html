@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>FPS Pro Test</title>
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+#fps {
+  font-size: 40px;
+  margin-top: 20px;
+}
+.controls {
+  margin: 20px;
+}
+canvas {
+  display: block;
+}
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  background: crimson;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>🔥 FPS Stress Test</h1>
+<div id="fps">0 FPS</div>
+
+<div class="controls">
+  <button onclick="addLoad()">➕ زيادة الضغط</button>
+  <button onclick="removeLoad()">➖ تقليل الضغط</button>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let objects = 50;
+let lastTime = performance.now();
+let frames = 0;
+
+function draw(time) {
+  frames++;
+
+  if (time >= lastTime + 1000) {
+    document.getElementById("fps").innerText = frames + " FPS";
+    frames = 0;
+    lastTime = time;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < objects; i++) {
+    ctx.beginPath();
+    ctx.arc(
+      Math.sin(time/200 + i) * 200 + canvas.width/2,
+      Math.cos(time/200 + i) * 200 + canvas.height/2,
+      10,
+      0,
+      Math.PI * 2
+    );
+    ctx.fillStyle = "red";
+    ctx.fill();
+  }
+
+  requestAnimationFrame(draw);
+}
+
+function addLoad() {
+  objects += 50;
+}
+
+function removeLoad() {
+  objects = Math.max(10, objects - 50);
+}
+
+requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>
